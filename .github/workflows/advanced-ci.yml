@@ -55,12 +55,7 @@ jobs:
         uses: green-coding-berlin/eco-ci-energy-estimation@v5
         with:
           task: get-measurement
-          label: 'node setup'
-
-      - name: Eco-CI Results
-        uses: green-coding-berlin/eco-ci-energy-estimation@v5
-        with:
-          task: display-results
+          label: 'build'
 
   test:
     name: Test Job
@@ -82,6 +77,12 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
+
+      - name: Eco-CI Measurement (4)
+        uses: green-coding-berlin/eco-ci-energy-estimation@v5
+        with:
+          task: get-measurement
+          label: 'test cache'
 
       - name: Install dependencies
         run: npm install
@@ -115,6 +116,17 @@ jobs:
 
       - name: Run tests
         run: npm run lint
+
+      - name: Eco-CI Measurement (5)
+        uses: green-coding-berlin/eco-ci-energy-estimation@v5
+        with:
+          task: get-measurement
+          label: 'run lint'
+
+      - name: Eco-CI Results
+        uses: green-coding-berlin/eco-ci-energy-estimation@v5
+        with:
+          task: display-results
 
   security-scan:
     name: Security Scan Job
