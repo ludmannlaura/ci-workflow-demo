@@ -15,11 +15,23 @@ env:
 
 jobs:
   build:
-    name: Build Job
+    name: Build Job Measured
     runs-on: ubuntu-latest
     steps:
+    
+      - name: Eco-CI Initialization
+        uses: green-coding-berlin/eco-ci-energy-estimation@v5
+        with:
+          task: start-measurement
+          
       - name: Checkout code
         uses: actions/checkout@v6
+
+      - name: Eco-CI Measurement (1)
+        uses: green-coding-berlin/eco-ci-energy-estimation@v5
+        with:
+          task: get-measurement
+          label: 'repo checkout'
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
@@ -39,6 +51,17 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Eco-CI Measurement (2)
+        uses: green-coding-berlin/eco-ci-energy-estimation@v5
+        with:
+          task: get-measurement
+          label: 'node setup'
+
+      - name: Eco-CI Results
+        uses: green-coding-berlin/eco-ci-energy-estimation@v5
+        with:
+          task: display-results
 
   test:
     name: Test Job
